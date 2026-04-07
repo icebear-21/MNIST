@@ -3,7 +3,7 @@ from model import ICE_NET
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
