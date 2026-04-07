@@ -3,7 +3,7 @@ from model import ICE_NET
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW
-from tqdm import tqdm
+from tqdm.notebook import tqdm
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -28,7 +28,7 @@ epochs = 10
 def train(model, train_loader, epochs):
     model.train()
 
-    for epoch in range(epochs):
+    for epoch in tqdm(range(epochs)):
         running_loss = 0.0
         for X, y in train_loader:
             optimizer.zero_grad()
