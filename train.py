@@ -19,11 +19,11 @@ args = parser.parse_args()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,), inplace = True),
     transforms.RandomRotation(20),
     transforms.RandomHorizontalFlip(0.5),
-    transforms.RandomCrop((22,22), 6)
+    transforms.RandomCrop(28, 4),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,), inplace = True)
 ])
 
 train_data = datasets.FashionMNIST(root = "./data", train = True, download = True, transform = transform)
