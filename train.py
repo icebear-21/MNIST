@@ -5,27 +5,39 @@ from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW
 from torch import nn
 from tqdm import tqdm
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--epochs", type = int, default = 10)
+parser.add_argument("--batch_size", type = int, default = 64)
+parser.add_argument("--lr", type=float, default = 1e-4)
+parser.add_argument("--num_workers", type = int, default = 2)
+parser.add_argument("--weight_decay", type = float, default = 1e-4)
+args = parser.parse_args()
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 transform = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,), inplace = True)
+    transforms.Normalize((0.5,), (0.5,), inplace = True),
+    transforms.RandomRotation(20),
+    transforms.RandomHorizontalFlip(0.5),
+    transforms.RandomCrop((22,22), 6)
 ])
 
 train_data = datasets.FashionMNIST(root = "./data", train = True, download = True, transform = transform)
 test_data = datasets.FashionMNIST(root = "./data", train = False, download = True, transform = transform)
 
-train_loader = DataLoader(train_data, batch_size = 64, shuffle = True, num_workers = 4)
-test_loader = DataLoader(test_data, batch_size = 64, shuffle = False, num_workers = 4)
+train_loader = DataLoader(train_data, batch_size = 64, shuffle = True, num_workers = args.num_workers)
+test_loader = DataLoader(test_data, batch_size = 64, shuffle = False, num_workers = args.num_workers)
 
 
 model = ICE_NET(num_classes = 10).to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = AdamW(model.parameters(), lr = 1e-4)
+optimizer = AdamW(model.parameters(), lr = args.lr, weight_decay = args.weight_decay)
 
-epochs = 10
+epochs = args.epochs
 
 def train(model, train_loader, epochs):
     model.train()
