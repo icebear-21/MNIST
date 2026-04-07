@@ -16,16 +16,16 @@ class ICE_NET(nn.Module):
 
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
 
-        self.fc1 = nn.Linear(4096, 512)
-        self.fc2 = nn.Linear(512, self.num_classes)
+        self.fc1 = nn.Linear(64, 32)
+        self.fc2 = nn.Linear(32, self.num_classes)
 
     def forward(self, x):
         x = self.relu(self.bn1(self.conv1(x)))
         x = self.relu(self.bn2(self.conv2(x)))
         x = self.relu(self.bn3(self.conv3(x)))
 
-        # x = x.view(x.size(0), -1)
         x = self.avg_pool(x)
+        x = x.view(x.size(0), -1)
 
         x = self.relu(self.fc1(x))
         x = self.relu(self.fc2(x))
