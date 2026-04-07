@@ -16,7 +16,7 @@ class ICE_NET(nn.Module):
 
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
 
-        self.fc1 = nn.Linear(3136, 512)
+        self.fc1 = nn.Linear(4096, 512)
         self.fc2 = nn.Linear(512, self.num_classes)
 
     def forward(self, x):
